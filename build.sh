@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-ghc --make ./text.hs
+ghc --make ./Game.hs
