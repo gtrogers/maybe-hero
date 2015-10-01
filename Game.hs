@@ -3,7 +3,9 @@ import Data.Map as Map
 import MaybeHero.Player
 import MaybeHero.Room
 import MaybeHero.Rooms
+import MaybeHero.Move
 
+player = Player drawingRoom (describeRoom drawingRoom)
 main = doGame player
 
 doGame :: Player -> IO ()
@@ -15,10 +17,9 @@ doGame player = do
     _      -> doGame $ gameLogic line player
 
 gameLogic :: String -> Player -> Player
-gameLogic direction oldPlayer@(Player (Room _ _ orientation) _) =
-  case (Map.lookup direction orientation) of
-      Nothing -> updateLine oldPlayer "You can't go that way..."
-      Just room -> moveRoom oldPlayer room
-
-player = Player drawingRoom (describeRoom drawingRoom)
+gameLogic input oldPlayer =
+  case (words input) of
+      [] -> updateLine oldPlayer "..."
+      (x:xs) | x == "move" -> move xs oldPlayer
+      _ -> updateLine oldPlayer $ "I don't know how to " ++ input
 
