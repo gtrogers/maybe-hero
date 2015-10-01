@@ -4,8 +4,7 @@ import qualified Data.Map as Map
 
 import MaybeHero.Player
 import MaybeHero.Room
-
-type Command = [String] -> Player -> Player
+import MaybeHero.Command
 
 move :: Command
 
