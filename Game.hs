@@ -4,6 +4,7 @@ import MaybeHero.Player
 import MaybeHero.Room
 import MaybeHero.Rooms
 import MaybeHero.Move
+import MaybeHero.Look
 
 player = Player drawingRoom (describeRoom drawingRoom)
 main = doGame player
@@ -21,5 +22,6 @@ gameLogic input oldPlayer =
   case (words input) of
       [] -> updateLine oldPlayer "..."
       (x:xs) | x == "move" -> move xs oldPlayer
+      (x:xs) | x == "look" -> look xs oldPlayer
       _ -> updateLine oldPlayer $ "I don't know how to " ++ input
 
