@@ -1,7 +1,10 @@
+import Data.Map as Map
+
 main = doGame player
 
 doGame :: Player -> IO ()
 doGame player = do
+  putStrLn . getLastResult $ player
   putStrLn . describeRoom . getCurrentRoom $ player 
   line <- getLine
   case line of
@@ -9,29 +12,33 @@ doGame player = do
     _      -> doGame $ gameLogic line player
 
 gameLogic :: String -> Player -> Player
-gameLogic "north" (Player (Room "drawing" _ _)) = Player dungeonRoom
-gameLogic "south" (Player (Room "dungeon" _ _)) = Player drawingRoom
-gameLogic _ oldPlayer = oldPlayer
+gameLogic direction oldPlayer@(Player (Room _ _ orientation) _) =
+  case (Map.lookup direction orientation) of
+      Nothing -> updateResult oldPlayer "\nYou can't go that way..."
+      Just room -> Player room ""
 
-data Player = Player Room | Ghost Room
-  deriving Show
+data Player = Player Room String
 data Room = Room String String Orientation
-data Orientation = Orientation (Maybe Room) (Maybe Room) (Maybe Room) (Maybe Room)
-  deriving Show
 
-instance Show Room where
-  show (Room name _ _) = "Room " ++ name
-
-northOnly r = Orientation (Just r) Nothing Nothing Nothing
-southOnly r = Orientation Nothing Nothing (Just r) Nothing
+type Orientation = Map.Map String Room
 
 describeRoom :: Room -> String
-describeRoom (Room _ description orientation) = description ++ " " ++ show orientation
+describeRoom (Room name description orientation) = "[" ++ name ++ "]\n" ++ description ++ (roomTransitions orientation)
 
-drawingRoom = Room "drawing" "Some more tea vicar?" (northOnly dungeonRoom) 
-dungeonRoom = Room "dungeon" "Some more latex vicar?" (southOnly drawingRoom)
+roomTransitions :: Orientation -> String
+roomTransitions o = foldWithKey addDesc "" o
+  where addDesc k (Room name _ _) str = str ++ "\n  " ++ k ++ " " ++ name
 
-player = Player drawingRoom
+drawingRoom = Room "Drawing Room" "You see some faded drapes, an old sofa and a sleeping vicar." (Map.fromList [("north",dungeonRoom), ("up", upstairsRoom)])
+upstairsRoom = Room "Upstairs" "You are upstairs, it is dark and drafty here." (Map.fromList [("down",drawingRoom)])
+dungeonRoom = Room "The Dungeon" "The dungeon is pleasantly central heated." (Map.fromList [("south",drawingRoom)])
+
+player = Player drawingRoom "Welcome to Maybe Hero!"
 
 getCurrentRoom :: Player -> Room
-getCurrentRoom (Player room) = room
+getCurrentRoom (Player room _) = room
+getLastResult :: Player -> String
+getLastResult (Player _ lastActionResult) = lastActionResult
+updateResult :: Player -> String -> Player
+updateResult (Player room lastResult) s = Player room s
+
