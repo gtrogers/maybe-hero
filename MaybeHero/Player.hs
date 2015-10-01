@@ -6,10 +6,11 @@ module MaybeHero.Player
 
 import MaybeHero.Room
 
-data Player = Player { room :: Room, lastLine :: String }
+data Player = Player { room :: Room, nextLine :: String }
 
 moveRoom :: Player -> Room -> Player
-moveRoom (Player _ lastLine) r = Player r lastLine
+moveRoom (Player _ n) r = Player r (describeRoom r)
 
 updateLine :: Player -> String -> Player
-updateLine (Player room _) newLastLine = Player room newLastLine
+updateLine (Player room _) n = Player room n
+

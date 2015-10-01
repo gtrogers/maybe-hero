@@ -12,11 +12,10 @@ describeRoom (Room name description orientation) =
   "[" ++ name ++ "]\n" 
   ++ description
   ++ (roomTransitions orientation)
-  ++ "\n"
 
 type Orientation = Map.Map String Room
 
 roomTransitions :: Orientation -> String
 roomTransitions o = Map.foldWithKey addDesc "" o
-  where addDesc k (Room name _ _) str = str ++ "\n  " ++ k ++ " " ++ name
+  where addDesc k (Room name _ _) str = str ++ "\n  " ++ k ++ "\t| " ++ name
 

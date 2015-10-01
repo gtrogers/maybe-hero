@@ -8,8 +8,7 @@ main = doGame player
 
 doGame :: Player -> IO ()
 doGame player = do
-  putStrLn . lastLine $ player
-  putStrLn . describeRoom . room $ player 
+  putStrLn . (++ "\n") . nextLine $ player
   line <- getLine
   case line of
     "exit" -> return ()
@@ -18,10 +17,8 @@ doGame player = do
 gameLogic :: String -> Player -> Player
 gameLogic direction oldPlayer@(Player (Room _ _ orientation) _) =
   case (Map.lookup direction orientation) of
-      Nothing -> updateLine oldPlayer "\nYou can't go that way..."
+      Nothing -> updateLine oldPlayer "You can't go that way..."
       Just room -> moveRoom oldPlayer room
 
-
-
-player = Player drawingRoom "Welcome to Maybe Hero!"
+player = Player drawingRoom (describeRoom drawingRoom)
 

@@ -12,7 +12,13 @@ drawingRoom =
   Room
     "Drawing Room"
     "You see some faded drapes, an old sofa and a sleeping vicar."
-    (Map.fromList [("north",dungeonRoom), ("up", upstairsRoom)])
+    (Map.fromList [("north",dungeonRoom), ("up", upstairsRoom), ("east", billiardsRoom)])
+
+billiardsRoom = 
+  Room
+    "Billiards Room"
+    "You see a sinister looking billiards table and a collection of empty brandy glasses."
+    (Map.fromList [("west", drawingRoom)])
 
 upstairsRoom =
   Room
