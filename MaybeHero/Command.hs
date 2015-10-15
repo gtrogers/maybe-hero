@@ -1,6 +1,5 @@
 module MaybeHero.Command (Command) where
 
-import MaybeHero.Player
+import qualified MaybeHero.World as World
 
-type Command = [String] -> Player -> Player
-
+type Command = [String] -> World.World -> World.World

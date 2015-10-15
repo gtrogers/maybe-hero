@@ -1,13 +1,13 @@
 module MaybeHero.Help (help) where
 
-import MaybeHero.Player
+import MaybeHero.World
 import MaybeHero.Command
 
 help :: Command
 
-help inputTokens oldPlayer =
-  updateLine oldPlayer $
-    unwords $ 
+help inputTokens oldWorld =
+  updateLine oldWorld $
+    unwords $
       map (++ "\n")
         [" Move [direction] | Move in [direction]"
         ,"Look             | Print room information"]

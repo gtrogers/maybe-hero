@@ -1,11 +1,10 @@
 module MaybeHero.Look (look) where
 
-import MaybeHero.Command
-import MaybeHero.Player
-import MaybeHero.Room
+import qualified MaybeHero.Command as Command
+import qualified MaybeHero.World as World
+import qualified MaybeHero.Room as Room
 
-look :: Command
+look :: Command.Command
 
-look inputTokens oldPlayer@(Player room _) =
-  updateLine oldPlayer $ describeRoom room
-
+look inputTokens oldWorld@(World.World room _) =
+  World.updateLine oldWorld $ Room.describeRoom room

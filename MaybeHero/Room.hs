@@ -1,21 +1,32 @@
 module MaybeHero.Room
-( Room (..)
+( Room
 , describeRoom
+, mkRoom
+, roomOrientation
 ) where
 
 import qualified Data.Map as Map
 
-data Room = Room String String Orientation
+type RoomName = String
+type Description = String
+type Orientation = Map.Map String Room
+data Room = Room RoomName Description Orientation
+
 
 describeRoom :: Room -> String
 describeRoom (Room name description orientation) =
-  "[" ++ name ++ "]\n" 
+  "[" ++ name ++ "]\n"
   ++ description
-  ++ (roomTransitions orientation)
+  ++ (showRoomTransitions orientation)
 
-type Orientation = Map.Map String Room
+roomName :: Room -> String
+roomName (Room name _ _) = name
 
-roomTransitions :: Orientation -> String
-roomTransitions o = Map.foldWithKey addDesc "" o
-  where addDesc k (Room name _ _) str = str ++ "\n  " ++ k ++ "\t| " ++ name
+roomOrientation :: Room -> Orientation
+roomOrientation (Room _ _ orientation) = orientation
 
+mkRoom = Room
+
+showRoomTransitions :: Orientation -> String
+showRoomTransitions o = Map.foldWithKey addDesc "" o
+  where addDesc k room str = str ++ "\n  " ++ k ++ "\t| " ++ (roomName room)

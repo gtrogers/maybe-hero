@@ -1,29 +1,28 @@
 import Data.Map as Map
 
-import MaybeHero.Player
+import MaybeHero.World
 import MaybeHero.Room
 import MaybeHero.Rooms
 import MaybeHero.Move
 import MaybeHero.Look
 import MaybeHero.Help
 
-player = Player drawingRoom (describeRoom drawingRoom)
-main = doGame player
+world = World drawingRoom (describeRoom drawingRoom)
+main = doGame world
 
-doGame :: Player -> IO ()
-doGame player = do
-  putStrLn . (++ "\n") . nextLine $ player
+doGame :: World -> IO ()
+doGame world = do
+  putStrLn . (++ "\n") . nextLine $ world
   line <- getLine
   case line of
     "exit" -> return ()
-    _      -> doGame $ gameLogic line player
+    _      -> doGame $ gameLogic line world
 
-gameLogic :: String -> Player -> Player
-gameLogic input oldPlayer =
+gameLogic :: String -> World -> World
+gameLogic input oldWorld =
   case (words input) of
-      [] -> updateLine oldPlayer "..."
-      (x:xs) | x `elem` ["move","go","walk","run"] -> move xs oldPlayer
-      (x:xs) | x == "help" -> help xs oldPlayer
-      (x:xs) | x == "look" -> look xs oldPlayer
-      _ -> updateLine oldPlayer $ "I don't know how to " ++ input
-
+      [] -> updateLine oldWorld "..."
+      (x:xs) | x `elem` ["move","go","walk","run"] -> move xs oldWorld
+      (x:xs) | x == "help" -> help xs oldWorld
+      (x:xs) | x == "look" -> look xs oldWorld
+      _ -> updateLine oldWorld $ "I don't know how to " ++ input
