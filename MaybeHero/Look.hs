@@ -7,4 +7,4 @@ import qualified MaybeHero.Room as Room
 look :: Command.Command
 
 look inputTokens oldWorld@(World.World room _) =
-  World.updateLine oldWorld $ Room.describeRoom room
+  World.updateLine oldWorld $ Room.showScenery room
