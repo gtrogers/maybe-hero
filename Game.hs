@@ -1,6 +1,7 @@
 import Data.Map as Map
 
 import MaybeHero.World
+import qualified MaybeHero.Input as Input
 import MaybeHero.Room
 import MaybeHero.Rooms
 import MaybeHero.Move
@@ -20,9 +21,10 @@ doGame world = do
 
 gameLogic :: String -> World -> World
 gameLogic input oldWorld =
-  case (words input) of
+  case (Input.removeJunkWords $ words input) of
       [] -> updateLine oldWorld "..."
       (x:xs) | x `elem` ["move","go","walk","run"] -> move xs oldWorld
       (x:xs) | x == "help" -> help xs oldWorld
       (x:xs) | x == "look" -> look xs oldWorld
       _ -> updateLine oldWorld $ "I don't know how to " ++ input
+
