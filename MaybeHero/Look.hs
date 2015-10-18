@@ -6,5 +6,7 @@ import qualified MaybeHero.Room as Room
 
 look :: Command.Command
 
-look inputTokens oldWorld@(World.World room _) =
-  World.updateLine oldWorld $ Room.showScenery room
+look [] oldWorld@(World.World room _)
+  = World.updateLine oldWorld $ Room.showScenery room
+look wordList oldWorld@(World.World room _)
+  = World.updateLine oldWorld $ Room.showSceneryWithName room (unwords wordList)

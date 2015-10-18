@@ -13,8 +13,8 @@ drawingRoom =
     "Drawing Room"
     "You see some faded drapes, an old sofa and a sleeping vicar."
     (Map.fromList [("north",dungeonRoom), ("up", upstairsRoom), ("east", billiardsRoom)])
-    [Scenery.mkScenery "Faded Drapes",
-     Scenery.mkScenery "Old Sofa"]
+    [Scenery.mkScenery "Faded Drapes" "The drapes are made of an old, faded velvet.",
+     Scenery.mkScenery "Old Sofa" "The sofa is green with white pinstripes, it sags decidedly to one side."]
 
 billiardsRoom =
   Room.mkRoom

@@ -21,7 +21,7 @@ doGame world = do
 
 gameLogic :: String -> World -> World
 gameLogic input oldWorld =
-  case (Input.removeJunkWords $ words input) of
+  case (Input.preProcess $ words input) of
       [] -> updateLine oldWorld "..."
       (x:xs) | x `elem` ["move","go","walk","run"] -> move xs oldWorld
       (x:xs) | x == "help" -> help xs oldWorld

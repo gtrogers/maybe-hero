@@ -4,6 +4,7 @@ module MaybeHero.Room
 , mkRoom
 , roomOrientation
 , showScenery
+, showSceneryWithName
 ) where
 
 import qualified Data.Map as Map
@@ -41,3 +42,10 @@ showScenery room =
   case (roomScenery room) of
     [] -> "There's nothing to see here"
     otherwise -> foldl (++) "" $ List.intersperse ", " $ map Scenery.sceneryName $ roomScenery room
+
+showSceneryWithName :: Room -> String -> String
+showSceneryWithName room name =
+  case (roomScenery room) of
+    [] -> "There's nothing to see here"
+    otherwise -> Scenery.findDescription (roomScenery room) name
+
