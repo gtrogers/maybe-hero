@@ -10,4 +10,4 @@ help inputTokens oldWorld =
     unwords $
       map (++ "\n")
         [" Move [direction] | Move in [direction]"
-        ,"Look             | Print room information"]
+        ,"Look [something] | Take a closer look at [something]"]
