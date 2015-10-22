@@ -1,3 +1,6 @@
+module Lib 
+(game) where
+
 import Data.Map as Map
 
 import MaybeHero.World
@@ -9,7 +12,7 @@ import MaybeHero.Look
 import MaybeHero.Help
 
 world = World drawingRoom (describeRoom drawingRoom)
-main = doGame world
+game = doGame world
 
 doGame :: World -> IO ()
 doGame world = do
