@@ -7,4 +7,4 @@ Super fun Haskell group learning
 
 ### Run the game
 
-``` stack exec maybe-hero-exec```
+``` stack exec maybe-hero-exe```
