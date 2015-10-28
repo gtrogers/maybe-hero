@@ -7,23 +7,36 @@ module MaybeHero.Scenery (
 ) where
 
 import qualified Data.Char as C
+import qualified MaybeHero.Utils as Utils
+import qualified Data.Map as Map
+import qualified Data.Maybe as Maybe
 
 type SceneryName = String
 type SceneryDescription = String
-data Scenery = Scenery SceneryName SceneryDescription
+type ScenerySynonyms = [String]
+data Scenery = Scenery SceneryName SceneryDescription ScenerySynonyms
 
-mkScenery :: String -> String -> Scenery
-mkScenery name description = Scenery name description
+mkScenery :: SceneryName -> ScenerySynonyms -> SceneryDescription -> Scenery
+mkScenery name syns description = Scenery name description syns
 
 sceneryName :: Scenery -> String
-sceneryName (Scenery name _) = name
+sceneryName (Scenery name _ _) = name
 
 sceneryDescription :: Scenery -> String
-sceneryDescription (Scenery _ desc) = desc
+sceneryDescription (Scenery _ desc _) = desc
 
-findDescription :: [Scenery] -> SceneryName -> String
-findDescription [] _ = "I can't see that here"
-findDescription sceneryList name = 
-  case (filter (\s -> (map C.toLower $ sceneryName s) == name) sceneryList) of 
-    [] -> "I can't see that here"
-    (x:xs) -> sceneryDescription x
+sceneryToSynTuple :: Scenery -> (Scenery, ScenerySynonyms)
+sceneryToSynTuple scenery@(Scenery name _ syns) = (scenery, Utils.lowerCaseWords $ name:syns)
+
+sceneryListToSynTuples :: [Scenery] -> [(Scenery, ScenerySynonyms)]
+sceneryListToSynTuples = map sceneryToSynTuple
+
+sceneryListToSceneryMap :: [Scenery] -> Map.Map String Scenery
+sceneryListToSceneryMap = Utils.reverseAndExpandTuple . sceneryListToSynTuples
+
+findScenery :: String -> [Scenery] -> Maybe Scenery
+findScenery possibleSyn = Map.lookup possibleSyn . sceneryListToSceneryMap
+
+findDescription :: String -> [Scenery] -> String
+findDescription word = (Maybe.maybe "I can't see that here" sceneryDescription) . (findScenery word)
+

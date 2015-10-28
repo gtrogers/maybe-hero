@@ -47,5 +47,5 @@ showSceneryWithName :: Room -> String -> String
 showSceneryWithName room name =
   case (roomScenery room) of
     [] -> "There's nothing to see here"
-    otherwise -> Scenery.findDescription (roomScenery room) name
+    otherwise -> Scenery.findDescription name (roomScenery room)
 
