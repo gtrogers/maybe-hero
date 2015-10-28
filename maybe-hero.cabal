@@ -19,11 +19,8 @@ library
   other-modules:       MaybeHero.World
                      , MaybeHero.Command
                      , MaybeHero.Input
-                     , MaybeHero.Move
                      , MaybeHero.Room
                      , MaybeHero.Rooms
-                     , MaybeHero.Help
-                     , MaybeHero.Look
                      , MaybeHero.Scenery
   build-depends:       base >= 4.7 && < 5
                      , containers
