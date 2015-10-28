@@ -24,8 +24,7 @@ gameLogic :: String -> World -> World
 gameLogic input oldWorld =
   case (Input.preProcess $ words input) of
       [] -> updateLine oldWorld "..."
-      (x:xs) | x `elem` ["move","go","walk","run"] -> Command.move xs oldWorld
-      (x:xs) | x == "help" -> Command.help xs oldWorld
-      (x:xs) | x == "look" -> Command.look xs oldWorld
-      _ -> updateLine oldWorld $ "I don't know how to " ++ input
+      (x:xs) -> case (Input.wordToCommand x) of
+                  (Just cmd) -> cmd xs oldWorld
+                  Nothing    -> updateLine oldWorld $ "I don't know how to " ++ input
 

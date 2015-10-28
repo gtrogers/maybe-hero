@@ -3,6 +3,7 @@ module MaybeHero.Command (
 , look
 , help
 , move
+, getCommands
 ) where
 
 import qualified MaybeHero.World as World
@@ -10,6 +11,12 @@ import qualified MaybeHero.Room as Room
 import qualified Data.Map as Map
 
 type Command = [String] -> World.World -> World.World
+
+
+getCommands :: [(Command, [String])]
+getCommands = [ (look, ["look"])
+              , (move, ["go", "move", "walk", "run"])
+              , (help, ["help"])]
 
 look :: Command
 
