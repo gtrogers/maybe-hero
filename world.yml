@@ -1,0 +1,18 @@
+- name: Drawing Room
+  description: You see some faded drapes, an old sofa and a sleeping vicar.
+  scenery:
+    - name: Faded Drapes
+      synonyms: [Drapes, Curtains]
+      description: "The drapes are made of an old, faded velvet."
+    - name: Old Sofa
+      synonyms: [Sofa, Couch]
+      description: The sofa is green with white pinstripes, it sags decidedly to one side.
+
+- name: Billards Room
+  description: You see a sinister looking billiards table and a collection of empty brandy glasses.
+
+- name: Upstairs
+  description: You are upstairs, it is dark and drafty here.
+
+- name: The Dungeon
+  description: The dungeon is pleasantly central heated.

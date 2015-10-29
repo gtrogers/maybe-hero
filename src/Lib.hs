@@ -6,6 +6,7 @@ import Data.Map as Map
 import qualified MaybeHero.World as World
 import qualified MaybeHero.Input as Input
 import qualified MaybeHero.Command as Command
+import qualified MaybeHero.WorldLoader as Loader
 import MaybeHero.Room
 import MaybeHero.Rooms
 
@@ -14,6 +15,8 @@ game = doGame world
 
 doGame :: World.World -> IO ()
 doGame world = do
+  -- w <- Loader.parseWorldFromFile "world.yml"
+  -- putStrLn $ describeRoom $ World.currentRoom w
   putStrLn . (++ "\n") . World.nextLine $ world
   line <- getLine
   case line of
@@ -23,16 +26,7 @@ doGame world = do
 gameLogic :: String -> World.World -> World.World
 gameLogic input oldWorld =
   case (Input.preProcess $ words input) of
-<<<<<<< HEAD
-      [] -> updateLine oldWorld "..."
+      [] -> World.updateLine oldWorld "..."
       (x:xs) -> case (Input.wordToCommand x) of
                   (Just cmd) -> cmd xs oldWorld
-                  Nothing    -> updateLine oldWorld $ "I don't know how to " ++ input
-
-=======
-      [] -> World.updateLine oldWorld "..."
-      (x:xs) | x `elem` ["move","go","walk","run"] -> move xs oldWorld
-      (x:xs) | x == "help" -> help xs oldWorld
-      (x:xs) | x == "look" -> look xs oldWorld
-      _ -> World.updateLine oldWorld $ "I don't know how to " ++ input
->>>>>>> John | encapsulate World constructor
+                  Nothing    -> World.updateLine oldWorld $ "I don't know how to " ++ input

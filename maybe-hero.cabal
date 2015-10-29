@@ -23,8 +23,11 @@ library
                      , MaybeHero.Rooms
                      , MaybeHero.Scenery
                      , MaybeHero.Utils
+                     , MaybeHero.WorldLoader
   build-depends:       base >= 4.7 && < 5
                      , containers
+                     , yaml-light
+                     , bytestring
   default-language:    Haskell2010
 
 executable maybe-hero-exe

@@ -1,3 +1,1 @@
-#!/usr/bin/env bash
-
-ghc --make ./Game.hs
+stack clean && stack build && stack exec maybe-hero-exe

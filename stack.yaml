@@ -1,5 +1,7 @@
 flags: {}
 packages:
 - '.'
-extra-deps: []
+extra-deps:
+- HsSyck-0.53
+- yaml-light-0.1.4
 resolver: lts-3.7
