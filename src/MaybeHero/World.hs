@@ -8,20 +8,23 @@ module MaybeHero.World
 ) where
 
 import qualified MaybeHero.Room as Room
+import qualified MaybeHero.Rooms as Rooms
 
-data World = World Room.Room String
+type RoomName = String
+data World = World RoomName String
 
-moveRoom :: World -> Room.Room -> World
-moveRoom (World _ n) r = World r (Room.describeRoom r)
+moveRoom :: World -> RoomName -> World
+moveRoom world@(World _ n) newRoomName = World newRoomName (Room.describeRoom room)
+ where room = Rooms.lookupRoom newRoomName
 
 currentRoom :: World -> Room.Room
-currentRoom (World room _) = room
+currentRoom (World currentRoomName _) = Rooms.lookupRoom currentRoomName
 
 nextLine :: World -> String
 nextLine (World _ n) = n
 
-mkWorld :: Room.Room -> String -> World
-mkWorld room nextLine = World room nextLine
+mkWorld :: RoomName -> String -> World
+mkWorld roomName nextLine = World roomName nextLine
 
 updateLine :: World -> String -> World
 updateLine (World room _) n = World room n

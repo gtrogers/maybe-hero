@@ -1,6 +1,7 @@
 module MaybeHero.Room
 ( Room
 , describeRoom
+, roomName
 , mkRoom
 , roomOrientation
 , showScenery
@@ -12,8 +13,9 @@ import qualified Data.List as List
 import qualified MaybeHero.Scenery as Scenery
 
 type RoomName = String
+type Direction = String
 type Description = String
-type Orientation = Map.Map String Room
+type Orientation = Map.Map Direction RoomName
 data Room = Room RoomName Description Orientation [Scenery.Scenery]
 
 describeRoom :: Room -> String
@@ -35,7 +37,7 @@ mkRoom name description orientation sceneryList = Room name description orientat
 
 showRoomTransitions :: Orientation -> String
 showRoomTransitions o = Map.foldWithKey addDesc "" o
-  where addDesc k room str = str ++ "\n  " ++ k ++ "\t| " ++ (roomName room)
+  where addDesc k roomName str = str ++ "\n  " ++ k ++ "\t| " ++ roomName
 
 showScenery :: Room -> String
 showScenery room =
@@ -48,4 +50,3 @@ showSceneryWithName room name =
   case (roomScenery room) of
     [] -> "There's nothing to see here"
     otherwise -> Scenery.findDescription name (roomScenery room)
-

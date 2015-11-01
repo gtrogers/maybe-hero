@@ -38,7 +38,7 @@ parseRooms y = case Y.unSeq y of
 parseWorld :: Y.YamlLight -> W.World
 parseWorld yml = case (parseRooms yml) of
   Left parseError -> error parseError
-  Right rooms -> W.World (head rooms) "just did some parsing!"
+  Right rooms -> W.World (R.roomName (head rooms)) "just did some parsing!"
 
 -- Thoughts -> store rooms in a map of id to function that returns a room when given orientations
   -- i.e. need some way of post-linking the constructed rooms
