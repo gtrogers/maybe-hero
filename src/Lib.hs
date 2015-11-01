@@ -11,24 +11,22 @@ import qualified MaybeHero.WorldLoader as Loader
 import MaybeHero.Room
 import MaybeHero.Rooms
 
-world = World.mkWorld (roomName room) (describeRoom room)
+start = (World.mkWorld (roomName room), (describeRoom room))
   where room = Rooms.drawingRoom
-game = doGame world
+game = doGame start
 
-doGame :: World.World -> IO ()
-doGame world = do
-  -- w <- Loader.parseWorldFromFile "world.yml"
-  -- putStrLn $ describeRoom $ World.currentRoom w
-  putStrLn . (++ "\n") . World.nextLine $ world
+doGame :: (World.World, String) -> IO ()
+doGame (world, output) = do
+  putStrLn . (++ "\n") $ output
   line <- getLine
   case line of
     "exit" -> return ()
     _      -> doGame $ gameLogic line world
 
-gameLogic :: String -> World.World -> World.World
-gameLogic input oldWorld =
+gameLogic :: String -> World.World -> (World.World, String)
+gameLogic input world =
   case (Input.preProcess $ words input) of
-      [] -> World.updateLine oldWorld "..."
+      [] -> (world, "...")
       (x:xs) -> case (Input.wordToCommand x) of
-                  (Just cmd) -> cmd xs oldWorld
-                  Nothing    -> World.updateLine oldWorld $ "I don't know how to " ++ input
+                  (Just cmd) -> cmd xs world
+                  Nothing    -> (world, "I don't know how to " ++ input)
