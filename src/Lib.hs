@@ -1,5 +1,5 @@
 module Lib
-(game) where
+(startGame) where
 
 import Data.Map as Map
 
@@ -11,9 +11,12 @@ import qualified MaybeHero.WorldLoader as Loader
 import MaybeHero.Room
 import MaybeHero.Rooms
 
-start = (World.mkWorld (roomName room), (describeRoom room))
-  where room = Rooms.drawingRoom
-game = doGame start
+startGame :: IO ()
+startGame = do
+  w <- Loader.parseWorldFromFile "world.yml"
+  let world = World.mkWorld "Drawing Room"
+  let room = World.currentRoom world
+  doGame (world, describeRoom room)
 
 doGame :: (World.World, String) -> IO ()
 doGame (world, output) = do

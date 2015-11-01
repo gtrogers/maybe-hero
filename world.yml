@@ -7,12 +7,22 @@
     - name: Old Sofa
       synonyms: [Sofa, Couch]
       description: The sofa is green with white pinstripes, it sags decidedly to one side.
+  orientation:
+    north: The Dungeon
+    up: Upstairs
+    east: Billiards Room
 
 - name: Billards Room
   description: You see a sinister looking billiards table and a collection of empty brandy glasses.
+  orientation:
+    west: Drawing Room
 
 - name: Upstairs
   description: You are upstairs, it is dark and drafty here.
+  orientation:
+    down: Drawing Room
 
 - name: The Dungeon
   description: The dungeon is pleasantly central heated.
+  orientation:
+    south: Drawing Room
