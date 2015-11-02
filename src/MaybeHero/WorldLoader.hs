@@ -11,70 +11,63 @@ import qualified Data.Maybe as Maybe
 import Control.Monad ((>>), (>>=), sequence)
 
 type ParseError = String
+type Yaml = Y.YamlLight
+type YamlMap = M.Map Y.YamlLight Y.YamlLight
+type YamlParser a = (Yaml -> Either ParseError a)
 
 yamlKey :: String -> Y.YamlLight
 yamlKey = Y.YStr . C8.pack
 
-parseString :: Y.YamlLight -> Either ParseError String
+parseString :: YamlParser String
 parseString y = Maybe.maybe (Left "Failure to parse string") (Right . C8.unpack) $ Y.unStr y
 
-parseSeq :: Y.YamlLight -> Either ParseError [Y.YamlLight]
-parseSeq y = Maybe.maybe (Left "Failure to parse sequence") Right $ Y.unSeq y
+parseSeq :: YamlParser a -> YamlParser [a]
+parseSeq p y = Maybe.maybe (Left "Failure to parse sequence") (sequence .(map p)) $ Y.unSeq y
 
-parseMap :: Y.YamlLight -> Either ParseError (M.Map Y.YamlLight Y.YamlLight)
+parseMap :: YamlParser YamlMap
 parseMap y = Maybe.maybe (Left "Failure to parse map") Right $ Y.unMap y
 
-yLookup :: String -> (M.Map Y.YamlLight Y.YamlLight) -> Either ParseError Y.YamlLight
-yLookup s m = Maybe.maybe (Left "Failure to lookup from map") Right $ M.lookup (yamlKey s) m
+parseMapValue :: String -> YamlParser a -> YamlMap -> Either ParseError a
+parseMapValue s p m = Maybe.maybe (Left "FAILED") p $ M.lookup (yamlKey s) m
 
-lookupString :: String -> Y.YamlLight -> Either ParseError String
-lookupString s y = (parseMap y) >>= (yLookup s) >>= parseString
+parseMapValueOptional :: String -> YamlParser a -> a -> YamlMap -> Either ParseError a
+parseMapValueOptional s p d m = Maybe.maybe (Right d) p $ M.lookup (yamlKey s) m
 
-parseMapEntry :: (Y.YamlLight, Y.YamlLight) -> Either ParseError (String, String)
-parseMapEntry (ky, vy) = do
-  k <- parseString ky
-  v <- parseString vy
+parseMapEntry :: (Ord a) => (Ord b) => YamlParser a -> YamlParser b -> (Yaml, Yaml) -> Either ParseError (a, b)
+parseMapEntry kp vp (ky, vy) = do
+  k <- kp ky
+  v <- vp vy
   return (k, v)
 
-parseStringMap :: Y.YamlLight -> Either ParseError (M.Map String String)
-parseStringMap y = do
+parseMapKeysAndValues :: (Ord a) => (Ord b) => YamlParser a -> YamlParser b -> YamlParser (M.Map a b)
+parseMapKeysAndValues kp vp y = do
   m <- parseMap y
-  l <- sequence $ map parseMapEntry $ M.toList m
+  l <- sequence $ map (parseMapEntry kp vp) $ M.toList m
   return (M.fromList l)
 
-parseOrientation :: Y.YamlLight -> Either ParseError (M.Map String String)
-parseOrientation = parseStringMap
+---------DOMAIN--SPECIFIC--STUFF-----------
 
-parseScenery :: Y.YamlLight -> Either ParseError S.Scenery
+parseScenery :: YamlParser S.Scenery
 parseScenery y = do
   m <- parseMap y
-  name <- lookupString "name" y
-  description <- lookupString "description" y
-  synonymsYaml <- parseMap y >>= (yLookup "synonyms") >>= parseSeq
-  synonyms <- sequence (map parseString synonymsYaml)
+  name        <- parseMapValue "name" parseString m
+  description <- parseMapValue "description" parseString m
+  synonyms    <- parseMapValue "synonyms" (parseSeq parseString) m
   Right $ S.mkScenery name synonyms description
 
-parseSceneryList :: [Y.YamlLight] -> Either ParseError [S.Scenery]
-parseSceneryList ys = sequence . (map parseScenery) $ ys
-
-parseRoom :: Y.YamlLight -> Either ParseError R.Room
+parseRoom :: YamlParser R.Room
 parseRoom y = do
   m <- parseMap y
-  name <- lookupString "name" y
-  description <- lookupString "description" y
-  sceneryList <- (yLookup "scenery" m) >>= parseSeq >>= parseSceneryList
-  orientation <- parseMap y >>= (yLookup "orientation") >>= parseOrientation
+  name        <- parseMapValue "name" parseString m
+  description <- parseMapValue "description" parseString m
+  sceneryList <- parseMapValueOptional "scenery" (parseSeq parseScenery) [] m
+  orientation <- parseMapValue "orientation" (parseMapKeysAndValues parseString parseString) m
   Right $ R.mkRoom name description orientation sceneryList
 
-parseRooms :: Y.YamlLight -> Either ParseError [R.Room]
-parseRooms y = case Y.unSeq y of
-  Just seq -> sequence $ map parseRoom seq
-  Nothing -> Left "Cannot read seq"
-
 parseWorld :: Y.YamlLight -> W.World
-parseWorld yml = case (parseRooms yml) of
-  Left parseError -> error parseError
-  Right rooms -> W.World (R.roomName (head rooms))
+parseWorld yml = case (parseSeq parseRoom yml) of
+  Left parseError -> error parseError -- FIXME don't lob an error out at this error
+  Right rooms -> W.mkWorld rooms (R.roomName (head rooms))
 
 parseWorldFromFile :: String -> IO W.World
 parseWorldFromFile s = do

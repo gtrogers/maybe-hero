@@ -9,13 +9,13 @@ import qualified MaybeHero.Room as Room
 import qualified MaybeHero.Rooms as Rooms
 
 type RoomName = String
-data World = World RoomName
+data World = World [Room.Room] RoomName
 
 moveRoom :: World -> RoomName -> World
-moveRoom world newRoomName = World newRoomName
+moveRoom (World rooms _) newRoomName = World rooms newRoomName
 
 currentRoom :: World -> Room.Room
-currentRoom (World currentRoomName) = Rooms.lookupRoom currentRoomName
+currentRoom (World rooms currentRoomName) = Rooms.lookupRoom currentRoomName rooms
 
-mkWorld :: RoomName -> World
-mkWorld roomName = World roomName
+mkWorld :: [Room.Room] -> RoomName -> World
+mkWorld rooms roomName = World rooms roomName

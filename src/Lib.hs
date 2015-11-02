@@ -13,8 +13,7 @@ import MaybeHero.Rooms
 
 startGame :: IO ()
 startGame = do
-  w <- Loader.parseWorldFromFile "world.yml"
-  let world = World.mkWorld "Drawing Room"
+  world <- Loader.parseWorldFromFile "world.yml"
   let room = World.currentRoom world
   doGame (world, describeRoom room)
 

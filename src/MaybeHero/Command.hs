@@ -31,11 +31,11 @@ move :: Command
 move [] world = (world, output)
   where output = "I can't move without a direction"
 
-move inputTokens world@(World.World roomName) =
+move inputTokens world@(World.World rooms roomName) =
   case (Map.lookup (unwords inputTokens) (Room.roomOrientation room)) of
     Nothing -> (world, unavailable)
     Just newRoomName -> (World.moveRoom world newRoomName, output)
-                           where output = Room.describeRoom $ Rooms.lookupRoom newRoomName
+                           where output = Room.describeRoom $ Rooms.lookupRoom newRoomName rooms
   where room = World.currentRoom world
         unavailable = "You can't go that way..."
 
