@@ -1,5 +1,5 @@
 module MaybeHero.World
-( World(..)
+( World
 , mkWorld
 , moveRoom
 , currentRoom
