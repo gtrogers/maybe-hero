@@ -11,13 +11,10 @@ removeJunkWords :: [String] -> [String]
 removeJunkWords words = filter (\w -> not $ w `elem` junkWords) words
   where junkWords = ["the", "a", "at"]
 
-
 preProcess = Utils.lowerCaseWords . removeJunkWords
-
 
 commandMap :: Map.Map String Command.Command
 commandMap = Utils.reverseAndExpandTuple Command.getCommands
 
 wordToCommand :: String -> Maybe Command.Command
 wordToCommand word = Map.lookup word commandMap
-
