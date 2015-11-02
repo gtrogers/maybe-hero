@@ -8,6 +8,8 @@ import qualified Data.Yaml.YamlLight as Y
 import qualified Data.Map as M
 import qualified Data.ByteString.Char8 as C8
 import qualified Data.Maybe as Maybe
+import qualified Data.Either as Either
+import MaybeHero.Utils (maybeToEither)
 import Control.Monad ((>>), (>>=), sequence)
 
 type ParseError = String
@@ -64,13 +66,30 @@ parseRoom y = do
   orientation <- parseMapValue "orientation" (parseMapKeysAndValues parseString parseString) m
   Right $ R.mkRoom name description orientation sceneryList
 
-parseWorld :: Y.YamlLight -> W.World
-parseWorld yml = case (parseSeq parseRoom yml) of
-  Left parseError -> error parseError -- FIXME don't lob an error out at this error
-  Right rooms -> W.mkWorld rooms (R.roomName (head rooms))
+roomListToMap = M.fromList . (map (\r -> (R.roomName r, r)))
+
+roomDestinations :: (M.Map String R.Room) -> [String]
+roomDestinations m = do
+  room <- map snd $ M.toList m
+  orientation <- map snd $ M.toList $ R.roomOrientation room
+  return orientation
+
+validateRoomLinkages :: (M.Map String R.Room) -> Either ParseError (M.Map String R.Room)
+validateRoomLinkages m = do
+    v <- validationResult
+    return m
+    where destinations = roomDestinations m
+          validateRoom = (\o -> maybeToEither ("No room with name " ++ o) (M.lookup o m))
+          validationResult = sequence $ map validateRoom destinations
+
+parseWorld :: Y.YamlLight -> Either ParseError W.World
+parseWorld yml = do
+  rooms <- parseSeq parseRoom yml
+  roomMap <- validateRoomLinkages $ roomListToMap rooms
+  return $ W.mkWorld roomMap (R.roomName (head rooms))
 
 parseWorldFromFile :: String -> IO W.World
 parseWorldFromFile s = do
   f <- readFile s
   y <- Y.parseYaml f
-  return (parseWorld y)
+  return $ Either.either error id (parseWorld y) -- throw error if parsing fails

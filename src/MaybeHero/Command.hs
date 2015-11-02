@@ -12,7 +12,6 @@ import qualified Data.Map as Map
 
 type Command = [String] -> World.World -> (World.World, String)
 
-
 getCommands :: [(Command, [String])]
 getCommands = [ (look, ["look"])
               , (move, ["go", "move", "walk", "run"])

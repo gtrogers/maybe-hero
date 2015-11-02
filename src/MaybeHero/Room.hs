@@ -16,7 +16,9 @@ type RoomName = String
 type Direction = String
 type Description = String
 type Orientation = Map.Map Direction RoomName
+type LinkedOrientation = Map.Map Direction Room
 data Room = Room RoomName Description Orientation [Scenery.Scenery]
+data LinkedRoom = LinkedRoom RoomName Description LinkedOrientation [Scenery.Scenery]
 
 describeRoom :: Room -> String
 describeRoom (Room name description orientation _) =
