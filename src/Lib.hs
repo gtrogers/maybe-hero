@@ -4,12 +4,10 @@ module Lib
 import Data.Map as Map
 
 import qualified MaybeHero.World as World
-import qualified MaybeHero.Rooms as Rooms
 import qualified MaybeHero.Input as Input
 import qualified MaybeHero.Command as Command
 import qualified MaybeHero.WorldLoader as Loader
 import MaybeHero.Room
-import MaybeHero.Rooms
 
 startGame :: IO ()
 startGame = do

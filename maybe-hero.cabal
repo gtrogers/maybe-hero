@@ -20,7 +20,6 @@ library
                      , MaybeHero.Command
                      , MaybeHero.Input
                      , MaybeHero.Room
-                     , MaybeHero.Rooms
                      , MaybeHero.Scenery
                      , MaybeHero.Utils
                      , MaybeHero.WorldLoader

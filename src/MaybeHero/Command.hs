@@ -8,7 +8,6 @@ module MaybeHero.Command (
 
 import qualified MaybeHero.World as World
 import qualified MaybeHero.Room as Room
-import qualified MaybeHero.Rooms as Rooms
 import qualified Data.Map as Map
 
 type Command = [String] -> World.World -> (World.World, String)
@@ -31,11 +30,12 @@ move :: Command
 move [] world = (world, output)
   where output = "I can't move without a direction"
 
+-- TODO some of the code below belongs in world
 move inputTokens world@(World.World rooms roomName) =
   case (Map.lookup (unwords inputTokens) (Room.roomOrientation room)) of
     Nothing -> (world, unavailable)
     Just newRoomName -> (World.moveRoom world newRoomName, output)
-                           where output = Room.describeRoom $ Rooms.lookupRoom newRoomName rooms
+                           where output = Room.describeRoom $ World.lookupRoom newRoomName rooms
   where room = World.currentRoom world
         unavailable = "You can't go that way..."
 
