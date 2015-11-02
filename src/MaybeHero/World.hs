@@ -20,8 +20,14 @@ lookupRoom s rooms = case (Map.lookup s (roomMap rooms)) of
   (Just room) -> room
   _ -> error $ "Room does not exist for name " ++ s
 
-moveRoom :: World -> RoomName -> World
-moveRoom (World rooms _) newRoomName = World rooms newRoomName
+lookupRoomMaybe :: String -> [Room.Room] -> Maybe Room.Room
+lookupRoomMaybe s = (Map.lookup s) . roomMap
+
+moveRoom :: String -> World -> Maybe World
+moveRoom direction (World rooms currentRoomName) = do
+  currentRoom <- lookupRoomMaybe currentRoomName rooms
+  newRoomName <- Map.lookup direction $ Room.roomOrientation currentRoom
+  return $ World rooms newRoomName
 
 currentRoom :: World -> Room.Room
 currentRoom (World rooms currentRoomName) = lookupRoom currentRoomName rooms

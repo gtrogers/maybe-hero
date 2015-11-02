@@ -27,17 +27,11 @@ look wordList world = (world, output)
 
 move :: Command
 
-move [] world = (world, output)
-  where output = "I can't move without a direction"
-
--- TODO some of the code below belongs in world
-move inputTokens world@(World.World rooms roomName) =
-  case (Map.lookup (unwords inputTokens) (Room.roomOrientation room)) of
-    Nothing -> (world, unavailable)
-    Just newRoomName -> (World.moveRoom world newRoomName, output)
-                           where output = Room.describeRoom $ World.lookupRoom newRoomName rooms
-  where room = World.currentRoom world
-        unavailable = "You can't go that way..."
+move [] world = (world, "I can't move without a direction")
+move inputTokens world =
+  case (World.moveRoom (unwords inputTokens) world) of
+    Nothing -> (world, "You can't go that way...")
+    Just newWorld -> (newWorld, Room.describeRoom $ World.currentRoom newWorld)
 
 help :: Command
 
