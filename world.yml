@@ -12,10 +12,14 @@
     up: Upstairs
     east: Billiards Room
 
-- name: Billards Room
+- name: Billiards Room
   description: You see a sinister looking billiards table and a collection of empty brandy glasses.
   orientation:
     west: Drawing Room
+  scenery:
+    - name: Billiards table
+      synonyms: [Pool table, table]
+      description: The billiards table is damp and has large gouges in the baize.
 
 - name: Upstairs
   description: You are upstairs, it is dark and drafty here.
