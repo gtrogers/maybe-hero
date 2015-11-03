@@ -8,11 +8,16 @@ import qualified MaybeHero.Input as Input
 import qualified MaybeHero.Command as Command
 import qualified MaybeHero.WorldLoader as Loader
 import qualified MaybeHero.Room as Room
+import qualified MaybeHero.Utils as Utils
+import qualified Data.Maybe as Maybe
+import qualified System.Environment as Env
 
 
 startGame :: IO ()
 startGame = do
-  world <- Loader.parseWorldFromFile "world.yml"
+  args <- Env.getArgs
+  let fileName = Maybe.maybe (error "File argument must be supplied") id (Utils.headMaybe args)
+  world <- Loader.parseWorldFromFile fileName
   let room = World.currentRoom world
   doGame (world, Room.describeRoom room)
 

@@ -1,1 +1,1 @@
-stack clean && stack build && stack exec maybe-hero-exe
+stack clean && stack build && stack exec maybe-hero-exe world.yml

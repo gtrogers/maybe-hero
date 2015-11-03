@@ -2,6 +2,7 @@ module MaybeHero.Utils (
   reverseAndExpandTuple
 , lowerCaseWords
 , maybeToEither
+, headMaybe 
 ) where
 
 import qualified Data.Map as Map
@@ -24,6 +25,10 @@ toLower str = map C.toLower str
 lowerCaseWords :: [String] -> [String]
 lowerCaseWords wrds =  map toLower wrds
 
-maybeToEither :: a -> Maybe.Maybe b -> Either a b
+maybeToEither :: a -> Maybe b -> Either a b
 maybeToEither left maybeRight =
   Maybe.maybe (Left left) Right maybeRight
+
+headMaybe :: [a] -> Maybe a
+headMaybe [] = Nothing
+headMaybe (x:xs) = Just x
