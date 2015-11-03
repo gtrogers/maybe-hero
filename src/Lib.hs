@@ -7,13 +7,14 @@ import qualified MaybeHero.World as World
 import qualified MaybeHero.Input as Input
 import qualified MaybeHero.Command as Command
 import qualified MaybeHero.WorldLoader as Loader
-import MaybeHero.Room
+import qualified MaybeHero.Room as Room
+
 
 startGame :: IO ()
 startGame = do
   world <- Loader.parseWorldFromFile "world.yml"
   let room = World.currentRoom world
-  doGame (world, describeRoom room)
+  doGame (world, Room.describeRoom room)
 
 doGame :: (World.World, String) -> IO ()
 doGame (world, output) = do
