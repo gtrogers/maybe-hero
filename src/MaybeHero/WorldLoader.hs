@@ -11,6 +11,7 @@ import qualified Data.Maybe as Maybe
 import qualified Data.Either as Either
 import MaybeHero.Utils (maybeToEither)
 import Control.Monad ((>>), (>>=), sequence)
+import Control.Applicative ((<$>), (<$>))
 
 type ParseError = String
 type Yaml = Y.YamlLight
@@ -60,11 +61,11 @@ parseScenery y = do
 parseRoom :: YamlParser R.Room
 parseRoom y = do
   m <- parseMap y
-  name        <- parseMapValue "name" parseString m
-  description <- parseMapValue "description" parseString m
-  sceneryList <- parseMapValueOptional "scenery" (parseSeq parseScenery) [] m
-  orientation <- parseMapValue "orientation" (parseMapKeysAndValues parseString parseString) m
-  Right $ R.mkRoom name description orientation sceneryList
+  R.mkRoom <$>
+    parseMapValue "name" parseString m <*>
+    parseMapValue "description" parseString m <*>
+    parseMapValue "orientation" (parseMapKeysAndValues parseString parseString) m <*>
+    parseMapValueOptional "scenery" (parseSeq parseScenery) [] m
 
 roomListToMap = M.fromList . (map (\r -> (R.roomName r, r)))
 
