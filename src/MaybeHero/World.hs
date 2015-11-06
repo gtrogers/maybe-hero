@@ -6,6 +6,7 @@ module MaybeHero.World
 , lookupRoom
 , lookupRoomStrict
 , rooms
+, roomDestinations
 ) where
 
 import qualified Data.Map as Map
@@ -32,6 +33,12 @@ currentRoom world@(World roomMap currentRoomName) = lookupRoom currentRoomName w
 
 rooms :: World -> [Room.Room]
 rooms (World roomMap _) = Map.elems roomMap
+
+roomDestinations :: World -> [String]
+roomDestinations w = do
+  room <- rooms w
+  orientation <- Map.elems $ Room.roomOrientation room
+  return orientation
 
 mkWorld :: (Map.Map RoomName Room.Room) -> RoomName -> World
 mkWorld roomMap roomName = World roomMap roomName

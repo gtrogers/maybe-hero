@@ -1,3 +1,6 @@
+{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE OverlappingInstances #-}
+
 module MaybeHero.Yaml (
   (££),
   (££!),
@@ -26,9 +29,6 @@ yamlKey = Y.YStr . C8.pack
 
 parseString :: YamlParser String
 parseString y = Maybe.maybe (Left "Failure to parse string") (Right . C8.unpack) $ Y.unStr y
-
-parseByteString :: YamlParser C8.ByteString
-parseByteString y = Maybe.maybe (Left "Failure to parse bytestring") Right $ Y.unStr y
 
 parseSeq :: YamlParser a -> YamlParser [a]
 parseSeq p y =
@@ -64,6 +64,9 @@ class Parseable a where
 
 instance Parseable C8.ByteString where
   parseYaml = parseByteString
+
+instance Parseable String where
+  parseYaml = parseString
 
 instance (Parseable a) => Parseable [a] where
   parseYaml = parseSeq parseYaml
