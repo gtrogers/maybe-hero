@@ -1,32 +1,38 @@
-- name: Drawing Room
-  description: You see some faded drapes, an old sofa and a sleeping vicar.
-  scenery:
-    - name: Faded Drapes
-      synonyms: [Drapes, Curtains]
-      description: "The drapes are made of an old, faded velvet."
-    - name: Old Sofa
-      synonyms: [Sofa, Couch]
-      description: The sofa is green with white pinstripes, it sags decidedly to one side.
-  orientation:
-    north: The Dungeon
-    up: Upstairs
-    east: Billiards Room
+currentRoom: drawingRoom
+rooms:
+  drawingRoom:
+    name: Drawing Room
+    description: You see some faded drapes, an old sofa and a sleeping vicar.
+    scenery:
+      - name: Faded Drapes
+        synonyms: [Drapes, Curtains]
+        description: "The drapes are made of an old, faded velvet."
+      - name: Old Sofa
+        synonyms: [Sofa, Couch]
+        description: The sofa is green with white pinstripes, it sags decidedly to one side.
+    orientation:
+      north: dungeon
+      up: upstairs
+      east: billiardsRoom
 
-- name: Billiards Room
-  description: You see a sinister looking billiards table and a collection of empty brandy glasses.
-  orientation:
-    west: Drawing Room
-  scenery:
-    - name: Billiards table
-      synonyms: [Pool table, table]
-      description: The billiards table is damp and has large gouges in the baize.
+  billiardsRoom:
+    name: Billiards Room
+    description: You see a sinister looking billiards table and a collection of empty brandy glasses.
+    orientation:
+      west: drawingRoom
+    scenery:
+      - name: Billiards table
+        synonyms: [Pool table, table]
+        description: The billiards table is damp and has large gouges in the baize.
 
-- name: Upstairs
-  description: You are upstairs, it is dark and drafty here.
-  orientation:
-    down: Drawing Room
+  upstairs:
+    name: Upstairs
+    description: You are upstairs, it is dark and drafty here.
+    orientation:
+      down: drawingRoom
 
-- name: The Dungeon
-  description: The dungeon is pleasantly central heated.
-  orientation:
-    south: Drawing Room
+  dungeon:
+    name: The Dungeon
+    description: The dungeon is pleasantly central heated.
+    orientation:
+      south: drawingRoom
