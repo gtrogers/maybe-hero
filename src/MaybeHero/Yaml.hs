@@ -62,9 +62,6 @@ parseMapKeysAndValues kp vp y = do
 class Parseable a where
   parseYaml :: Yaml -> Either ParseError a
 
-instance Parseable C8.ByteString where
-  parseYaml = parseByteString
-
 instance Parseable String where
   parseYaml = parseString
 

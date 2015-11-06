@@ -24,6 +24,7 @@ library
                      , MaybeHero.Utils
                      , MaybeHero.WorldLoader
                      , MaybeHero.Yaml
+                     , MaybeHero.Inventory
   build-depends:       base >= 4.7 && < 5
                      , containers
                      , yaml-light

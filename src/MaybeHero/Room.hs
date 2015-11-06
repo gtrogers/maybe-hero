@@ -11,6 +11,7 @@ module MaybeHero.Room
 import qualified Data.Map as Map
 import qualified Data.List as List
 import qualified MaybeHero.Scenery as Scenery
+import qualified MaybeHero.Inventory as I
 
 type RoomName = String
 type Direction = String
@@ -33,7 +34,9 @@ roomScenery (Room _ _ _ sceneryList) = sceneryList
 roomOrientation :: Room -> Orientation
 roomOrientation (Room _ _ orientation _) = orientation
 
-mkRoom name description orientation sceneryList = Room name description orientation sceneryList
+mkRoom :: RoomName -> Description -> Orientation -> [Scenery.Scenery] -> [I.Item] ->  Room
+mkRoom name description orientation sceneryList itemList =
+  Room name description orientation sceneryList
 
 showRoomTransitions :: Orientation -> String
 showRoomTransitions o = Map.foldWithKey addDesc "" o

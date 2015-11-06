@@ -33,6 +33,7 @@ rooms:
 
   dungeon:
     name: The Dungeon
-    description: The dungeon is pleasantly central heated.
+    description: The dungeon is pleasantly central heated. There is a whip lying on the floor.
     orientation:
       south: drawingRoom
+    items: [Whip]

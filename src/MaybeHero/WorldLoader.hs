@@ -5,9 +5,15 @@ module MaybeHero.WorldLoader (
 import qualified MaybeHero.Scenery as S
 import qualified MaybeHero.Room as R
 import qualified MaybeHero.World as W
+import qualified MaybeHero.Inventory as I
 import qualified Data.Either as Either
 import MaybeHero.Yaml ((££), (£), (£!), Parseable, ParseError, parseYaml, parseFromFile)
 import MaybeHero.Utils (maybeToEither)
+
+instance Parseable I.Item where
+  parseYaml y = do
+    name <- parseYaml y
+    return $ I.mkItem name
 
 instance Parseable S.Scenery where
   parseYaml y =
@@ -23,6 +29,7 @@ instance Parseable R.Room where
     £  ("description", y)
     £  ("orientation", y)
     £! ("scenery", [], y)
+    £! ("items", [], y)
 
 instance Parseable W.World where
   parseYaml y =
