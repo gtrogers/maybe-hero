@@ -10,7 +10,7 @@ import qualified Data.Either as Either
 import MaybeHero.Yaml ((££), (£), (£!), Parseable, ParseError, parseYaml, parseFromFile)
 import MaybeHero.Utils (maybeToEither)
 
-instance Parseable I.Item where
+instance Parseable I.MoveableItem where
   parseYaml y = do
     name <- parseYaml y
     return $ I.mkItem name

@@ -1,11 +1,11 @@
 module MaybeHero.Inventory
-( Item
+( MoveableItem
 , mkItem)
 where
 
-data Item = Item String
+data MoveableItem = MoveableItem String
 
-instance Show Item where
-  show (Item s) = s
+instance Show MoveableItem where
+  show (MoveableItem s) = s
 
-mkItem s = Item s
+mkItem s = MoveableItem s

@@ -39,4 +39,3 @@ findScenery possibleSyn = Map.lookup possibleSyn . sceneryListToSceneryMap
 
 findDescription :: String -> [Scenery] -> String
 findDescription word = (Maybe.maybe "I can't see that here" sceneryDescription) . (findScenery word)
-
