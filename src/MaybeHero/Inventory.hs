@@ -3,9 +3,13 @@ module MaybeHero.Inventory
 , mkItem)
 where
 
-data MoveableItem = MoveableItem String
+import qualified MaybeHero.GameObject as GO
 
-instance Show MoveableItem where
-  show (MoveableItem s) = s
+data MoveableItem = MoveableItem String String [String]
 
-mkItem s = MoveableItem s
+instance GO.GameObject MoveableItem where
+  objectName (MoveableItem s _ _) = s
+  objectDescription o = "a description"
+  objectSynonyms o = []
+
+mkItem s = MoveableItem s "" []

@@ -12,6 +12,7 @@ import qualified Data.Map as Map
 import qualified Data.List as List
 import qualified MaybeHero.Scenery as Scenery
 import qualified MaybeHero.Inventory as I
+import qualified MaybeHero.GameObject as GO
 
 type RoomName = String
 type Direction = String
@@ -49,11 +50,11 @@ showScenery :: Room -> String
 showScenery room =
   case itemNames of
     [] -> "There's nothing to see here"
-    otherwise -> foldl (++) "" $ List.intersperse ", " $ map Scenery.sceneryName $ roomScenery room
-  where itemNames = map Scenery.sceneryName (roomScenery room) ++ map show (roomItems room)
+    otherwise -> foldl (++) "" $ List.intersperse ", " $ itemNames
+  where itemNames = map GO.objectName (roomScenery room) ++ map GO.objectName (roomItems room)
 
 showSceneryWithName :: Room -> String -> String
 showSceneryWithName room name =
   case (roomScenery room) of
     [] -> "There's nothing to see here"
-    otherwise -> Scenery.findDescription name (roomScenery room)
+    otherwise -> GO.findDescription name (roomScenery room)
