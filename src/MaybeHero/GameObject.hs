@@ -1,4 +1,10 @@
-module MaybeHero.GameObject where
+module MaybeHero.GameObject (
+  GameObject
+, objectName
+, objectDescription
+, objectSynonyms
+, findDescription
+) where
 
 import qualified Data.Map as Map
 import qualified MaybeHero.Utils as Utils

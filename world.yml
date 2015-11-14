@@ -1,4 +1,9 @@
 currentRoom: drawingRoom
+currentInventory:
+  - name: Starburst
+    synonyms: []
+    description: The packet of starburst is half-eaten.  All the strawberry ones have gone.
+
 rooms:
   drawingRoom:
     name: Drawing Room
@@ -36,4 +41,7 @@ rooms:
     description: The dungeon is pleasantly central heated. There is a whip lying on the floor.
     orientation:
       south: drawingRoom
-    items: [Whip]
+    items:
+      - name: Whip
+        synonyms: []
+        description: The whip is a novelty one.  It has a furry pink handle, and plays a recorded accordian version of the Indiana Jones theme tune when you push a button on the base.

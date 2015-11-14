@@ -8,8 +8,9 @@ import qualified MaybeHero.GameObject as GO
 data MoveableItem = MoveableItem String String [String]
 
 instance GO.GameObject MoveableItem where
-  objectName (MoveableItem s _ _) = s
-  objectDescription o = "a description"
-  objectSynonyms o = []
+  objectName (MoveableItem name _ _) = name
+  objectDescription (MoveableItem _ desc _) = desc
+  objectSynonyms (MoveableItem _ _ syns) = syns
 
-mkItem s = MoveableItem s "" []
+mkItem :: String -> [String] -> String -> MoveableItem
+mkItem n s d = MoveableItem n d s

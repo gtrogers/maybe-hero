@@ -15,7 +15,9 @@ type Command = [String] -> World.World -> (World.World, String)
 getCommands :: [(Command, [String])]
 getCommands = [ (look, ["look"])
               , (move, ["go", "move", "walk", "run"])
-              , (help, ["help"])]
+              , (help, ["help"])
+              , (inventory, ["inventory", "inv"])
+              ]
 
 look :: Command
 
@@ -38,3 +40,7 @@ help inputTokens world = (world, output)
   where output = unwords $ map (++ "\n")
                                     [" Move [direction] | Move in [direction]"
                                     ,"Look [something] | Take a closer look at [something]"]
+
+inventory :: Command
+
+inventory _ world = (world, World.showCurrentInventory world)

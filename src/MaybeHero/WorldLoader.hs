@@ -11,9 +11,11 @@ import MaybeHero.Yaml ((££), (£), (£!), Parseable, ParseError, parseYaml, pa
 import MaybeHero.Utils (maybeToEither)
 
 instance Parseable I.MoveableItem where
-  parseYaml y = do
-    name <- parseYaml y
-    return $ I.mkItem name
+  parseYaml y =
+    I.mkItem
+    ££ ("name", y)
+    £  ("synonyms", y)
+    £  ("description", y)
 
 instance Parseable S.Scenery where
   parseYaml y =
@@ -36,6 +38,7 @@ instance Parseable W.World where
     W.mkWorld
     ££ ("rooms", y)
     £  ("currentRoom", y)
+    £  ("currentInventory", y)
 
 validateWorld :: W.World -> Either ParseError W.World
 validateWorld w = do

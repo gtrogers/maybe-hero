@@ -28,11 +28,11 @@ yamlKey :: String -> Yaml
 yamlKey = Y.YStr . C8.pack
 
 parseString :: YamlParser String
-parseString y = Maybe.maybe (Left "Failure to parse string") (Right . C8.unpack) $ Y.unStr y
+parseString y = Maybe.maybe (Left ("Failure to parse string: [" ++ show y ++ "]")) (Right . C8.unpack) $ Y.unStr y
 
 parseSeq :: YamlParser a -> YamlParser [a]
 parseSeq p y =
-  Maybe.maybe (Left "Failure to parse sequence") (sequence .(map p)) $ Y.unSeq y
+  Maybe.maybe (Left ("Failure to parse sequence: [" ++ show y ++ "]")) (sequence .(map p)) $ Y.unSeq y
 
 parseMap :: YamlParser YamlMap
 parseMap y = Maybe.maybe (Left ("Failure to parse map for yaml: " ++ show y)) Right $ Y.unMap y
