@@ -3,6 +3,7 @@ module MaybeHero.Utils (
 , lowerCaseWords
 , maybeToEither
 , headMaybe
+, firstValue
 ) where
 
 import qualified Data.Map as Map
@@ -29,3 +30,7 @@ maybeToEither left maybeRight =
 headMaybe :: [a] -> Maybe a
 headMaybe [] = Nothing
 headMaybe (x:xs) = Just x
+
+firstValue :: [Maybe a] -> Maybe a
+firstValue [] = Nothing
+firstValue (x:xs) = if Maybe.isJust x then x else firstValue xs

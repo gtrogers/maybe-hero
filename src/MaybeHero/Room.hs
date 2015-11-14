@@ -10,33 +10,27 @@ module MaybeHero.Room
 
 import qualified Data.Map as Map
 import qualified Data.List as List
+import qualified Data.Maybe as Maybe
 import qualified MaybeHero.Scenery as Scenery
 import qualified MaybeHero.Inventory as I
 import qualified MaybeHero.GameObject as GO
+import qualified MaybeHero.Utils as Utils
 
 type RoomName = String
 type Direction = String
 type Description = String
 type Orientation = Map.Map Direction RoomName
-data Room = Room RoomName Description Orientation [Scenery.Scenery] [I.MoveableItem]
+data Room = Room { roomName :: RoomName
+                  ,roomDescription :: Description
+                  ,roomOrientation :: Orientation
+                  ,roomScenery :: [Scenery.Scenery]
+                  ,roomItems :: [I.MoveableItem]}
 
 describeRoom :: Room -> String
 describeRoom (Room name description orientation _ _) =
   "[" ++ name ++ "]\n"
   ++ description
   ++ (showRoomTransitions orientation)
-
-roomName :: Room -> String
-roomName (Room name _ _ _ _) = name
-
-roomScenery :: Room -> [Scenery.Scenery]
-roomScenery (Room _ _ _ sceneryList _) = sceneryList
-
-roomItems :: Room -> [I.MoveableItem]
-roomItems (Room _ _ _ _ items) = items
-
-roomOrientation :: Room -> Orientation
-roomOrientation (Room _ _ orientation _ _) = orientation
 
 mkRoom :: RoomName -> Description -> Orientation -> [Scenery.Scenery] -> [I.MoveableItem] ->  Room
 mkRoom name description orientation sceneryList itemList =
@@ -55,6 +49,6 @@ showScenery room =
 
 showSceneryWithName :: Room -> String -> String
 showSceneryWithName room name =
-  case (roomScenery room) of
-    [] -> "There's nothing to see here"
-    otherwise -> GO.findDescription name (roomScenery room)
+  (Maybe.maybe "There's nothing to see here" id) $
+   Utils.firstValue [GO.findDescription name (roomScenery room),
+                     GO.findDescription name (roomItems room)]

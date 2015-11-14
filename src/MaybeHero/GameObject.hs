@@ -21,5 +21,5 @@ objectListToObjectMap = Utils.reverseAndExpandTuple . objectListToSynTuples
 findObject :: GameObject a => String -> [a] -> Maybe a
 findObject possibleSyn = Map.lookup possibleSyn . objectListToObjectMap
 
-findDescription :: GameObject a => String -> [a] -> String
-findDescription word = (Maybe.maybe "I can't see that here" objectDescription) . (findObject word)
+findDescription :: GameObject a => String -> [a] -> Maybe String
+findDescription word  =  (fmap objectDescription) . (findObject word)
